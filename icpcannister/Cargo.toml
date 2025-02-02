@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/icpcannister_backend"
+]
+resolver = "2"
