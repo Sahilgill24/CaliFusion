@@ -7,7 +7,7 @@ import { useModelStore } from "@/lib/stores/model-store";
 import { useNewModelStore } from "@/lib/stores/new-model-store";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import React from "react";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 
 interface ModelDetailProps {
   hasCompletedAllSteps: boolean;
@@ -29,7 +29,8 @@ const ModelDetails = (props: ModelDetailProps) => {
   } = useNewModelStore();
 
   const { addModel } = useModelStore();
-  const { address } = useAccount();
+  // const { address } = useAccount();
+  const address = undefined; // TODO: Get address from account
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

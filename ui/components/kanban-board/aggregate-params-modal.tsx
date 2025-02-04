@@ -25,8 +25,8 @@ import Spinner from "@/components/ui/spinner";
 import axios from "axios";
 import { decrypt } from "@/lib/utils";
 import { EncryptedData } from "@/lib/utils";
-import { ethers } from "ethers";
-import abiJson from "../../../abi/aggregator.json"
+// import { ethers } from "ethers";
+// import abiJson from "../../../abi/aggregator.json"
 
 
 interface Contributor {
@@ -45,11 +45,11 @@ const AggregateParamsModalWrapper = ({
 }) => {
 
 
-  const abi = JSON.parse(JSON.stringify(abiJson))
-  const provider = new ethers.providers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com');
-  const signer = new ethers.Wallet('6b99711d264ac83b798ec10389f34afe53e6f6c6fdbb821b139aba9fd4cf9f2c', provider);
-  const contractAddress = '0x23cacbF723355F96fb42ce3ba1Cbc247F41C2568';
-  const aggregatorcontract = new ethers.Contract(contractAddress, abi, signer);
+  // const abi = JSON.parse(JSON.stringify(abiJson))
+  // const provider = new ethers.providers.JsonRpcProvider('https://ethereum-sepolia-rpc.publicnode.com');
+  // const signer = new ethers.Wallet('6b99711d264ac83b798ec10389f34afe53e6f6c6fdbb821b139aba9fd4cf9f2c', provider);
+  // const contractAddress = '0x23cacbF723355F96fb42ce3ba1Cbc247F41C2568';
+  // const aggregatorcontract = new ethers.Contract(contractAddress, abi, signer);
 
   const [contributors, setContributors] = useState<Contributor[]>([]);
   const [isLoading, setIsLoading] = useState(false);
