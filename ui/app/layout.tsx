@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${eiko.variable} ${satoshi.className}antialiased`}>
+      <body className={`${eiko.variable} ${satoshi.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
