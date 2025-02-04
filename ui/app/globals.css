@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    --background: 172 36% 98%;
+    --foreground: 172 56% 1%;
+    --muted: 172 24% 95%;
+    --muted-foreground: 172 6% 29%;
+    --popover: 172 36% 97%;
+    --popover-foreground: 172 56% 0%;
+    --card: 172 36% 97%;
+    --card-foreground: 172 56% 0%;
+    --border: 172 10% 93%;
+    --input: 172 10% 93%;
+    --primary: 144 73% 77%;
+    --primary-foreground: 172 73% 17%;
+    --secondary: 172 10% 82%;
+    --secondary-foreground: 172 10% 22%;
+    --accent: 172 16% 75%;
+    --accent-foreground: 172 16% 15%;
+    --destructive: 18 82% 28%;
+    --destructive-foreground: 18 82% 88%;
+    --ring: 172 73% 77%;
+    --chart-1: 172 73% 77%;
+    --chart-2: 172 10% 82%;
+    --chart-3: 172 16% 75%;
+    --chart-4: 172 10% 85%;
+    --chart-5: 172 76% 77%;
+    --radius: 0.5rem;
+    --highlight: 102 100% 68%;
+  }
+
+  .dark {
+    --background: 233 38% 4%;
+    --foreground: 172 25% 97%;
+    --muted: 172 24% 5%;
+    --muted-foreground: 172 6% 71%;
+    --popover: 172 47% 3%;
+    --popover-foreground: 172 25% 98%;
+    --card: 172 47% 3%;
+    --card-foreground: 172 25% 98%;
+    --border: 172 10% 13%;
+    --input: 172 10% 13%;
+    --primary: 144 100% 77%;
+    --primary-foreground: 172 73% 17%;
+    --secondary: 172 6% 8%;
+    --secondary-foreground: 172 6% 68%;
+    --accent: 172 14% 13%;
+    --accent-foreground: 172 14% 73%;
+    --destructive: 18 82% 47%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 172 73% 77%;
+    --chart-1: 172 73% 77%;
+    --chart-2: 172 6% 8%;
+    --chart-3: 172 14% 13%;
+    --chart-4: 172 6% 11%;
+    --chart-5: 172 76% 77%;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .gradient-theme {
+    @apply from-primary to-highlight;
+  }
+
+  .underline-theme {
+    @apply bg-gradient-to-r gradient-theme bg-[length:100%_2px] bg-no-repeat bg-bottom;
+  }
+
+  .decorate-theme {
+    @apply relative after:absolute after:bg-gradient-to-r gradient-theme after:bottom-2 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-100;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
