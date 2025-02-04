@@ -2,6 +2,11 @@
 
 use std::env::args;
 use std::process::exit;
+// Calimero code correction and blob storage for models and data set
+// model would be sent to those , who have the access key and no one else
+// diffie helmann key exchange will be used for that
+// over a flask server
+// the aggregation shall also happen on Calimero
 
 use calimero_blobstore::config::BlobStoreConfig;
 use calimero_blobstore::{BlobManager, FileSystem};
