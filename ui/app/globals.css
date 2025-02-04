@@ -6,7 +6,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-
 @layer base {
   :root {
     --background: 172 36% 98%;
@@ -19,7 +18,7 @@ body {
     --card-foreground: 172 56% 0%;
     --border: 172 10% 93%;
     --input: 172 10% 93%;
-    --primary: 172 73% 77%;
+    --primary: 144 73% 77%;
     --primary-foreground: 172 73% 17%;
     --secondary: 172 10% 82%;
     --secondary-foreground: 172 10% 22%;
@@ -34,6 +33,7 @@ body {
     --chart-4: 172 10% 85%;
     --chart-5: 172 76% 77%;
     --radius: 0.5rem;
+    --highlight: 102 100% 68%;
   }
 
   .dark {
@@ -47,7 +47,7 @@ body {
     --card-foreground: 172 25% 98%;
     --border: 172 10% 13%;
     --input: 172 10% 13%;
-    --primary: 172 73% 77%;
+    --primary: 144 100% 77%;
     --primary-foreground: 172 73% 17%;
     --secondary: 172 6% 8%;
     --secondary-foreground: 172 6% 68%;
@@ -71,16 +71,15 @@ body {
   .gradient-theme {
     @apply from-primary to-highlight;
   }
-  
+
   .underline-theme {
     @apply bg-gradient-to-r gradient-theme bg-[length:100%_2px] bg-no-repeat bg-bottom;
   }
-  
+
   .decorate-theme {
-    @apply relative after:absolute after:bg-gradient-to-r gradient-theme after:bottom-2 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-100
+    @apply relative after:absolute after:bg-gradient-to-r gradient-theme after:bottom-2 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-100;
   }
 }
-
 
 @layer base {
   * {

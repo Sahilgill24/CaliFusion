@@ -18,6 +18,7 @@ export default function Home() {
         variant={"shine"}
         size={"lg"}
         className="font-semibold"
+        onClick={() => router.push("/dashboard/publisher")}
       >
         Get Started
       </Button>

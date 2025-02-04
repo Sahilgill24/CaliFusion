@@ -5,9 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Separator } from "@/components/ui/separator";
-// import { useAccount, useBalance } from "wagmi";
-// import { sepolia } from "viem/chains";
-
 interface navItem {
   name: string;
   link: string;
@@ -22,12 +19,6 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const router = useRouter();
 
-  // Fetching account and balance (sepolia eth)
-  // const { address } = useAccount();
-  // const balance = useBalance({
-  //   address: address,
-  //   chainId: sepolia.id,
-  // });
   const address = "0x1234567890"; // TODO: make this dynamic as per user login
   const balance = 0.001
   

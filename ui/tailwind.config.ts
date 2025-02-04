@@ -45,7 +45,7 @@ export default {
           foreground: "hsl(var(--destructive-foreground))",
         },
         highlight: {
-          DEFAULT: "#6ee7b7",
+          DEFAULT: "hsl(var(--highlight))",
           foreground: "hsl(var(--primary-foreground))",
         },
         border: "hsl(var(--border))",
