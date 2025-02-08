@@ -1,67 +1,114 @@
-#![allow(unused_crate_dependencies)]
+#![allow(clippy::len_without_is_empty)]
 
-use std::env::args;
-use std::process::exit;
-// Calimero code correction and blob storage for models and data set
-// model would be sent to those , who have the access key and no one else
-// diffie helmann key exchange will be used for that
-// over a flask server
-// the aggregation shall also happen on Calimero
+use std::collections::BTreeMap;
 
-use calimero_blobstore::config::BlobStoreConfig;
-use calimero_blobstore::{BlobManager, FileSystem};
-use calimero_store::config::StoreConfig;
-use calimero_store::db::RocksDB;
-use calimero_store::Store;
-use eyre::Result as EyreResult;
-use futures_util::TryStreamExt;
-use tokio::io::{stdin, stdout, AsyncWriteExt};
-use tokio_util::compat::TokioAsyncReadCompatExt;
+use calimero_sdk::borsh::{BorshDeserialize, BorshSerialize};
+use calimero_sdk::serde::Serialize;
+use calimero_sdk::{app, env};
+use calimero_storage::collections::{StoreError, UnorderedMap, Vector};
+use thiserror::Error;
 
-const DATA_DIR: &'static str = "blob-tests/data";
-const BLOB_DIR: &'static str = "blob-tests/blob";
+#[app::state(emits = for<'a> Event<'a>)]
+#[derive(Debug, BorshSerialize, BorshDeserialize)]
+#[borsh(crate = "calimero_sdk::borsh")]
+pub struct ModelStore {
+    models: UnorderedMap<String, String>,
+    // Models stored and the Key to access that model
+    // AES encrypted key and model is used
+    publisher: String,
+}
 
-// deciding to use k-v store or blob storage , depending
-// upon the model size as well as the data base
-// k-v store can be done using AES encryption
-// here directly the blob hash can be used
+#[app::event]
+pub enum Event<'a> {
+    Inserted { key: &'a str, value: &'a str },
+    Updated { key: &'a str, value: &'a str },
+    Removed { key: &'a str },
+    Cleared,
+}
 
-#[tokio::main]
-async fn main() -> EyreResult<()> {
-    let config = StoreConfig::new(DATA_DIR.into());
+#[derive(Debug, Error, Serialize)]
+#[serde(crate = "calimero_sdk::serde")]
+#[serde(tag = "kind", content = "data")]
+pub enum Error<'a> {
+    #[error("key not found: {0}")]
+    NotFound(&'a str),
+    #[error("store error: {0}")]
+    StoreError(#[from] StoreError),
+}
 
-    let data_store = Store::open::<RocksDB>(&config)?;
-
-    let blob_store = FileSystem::new(&BlobStoreConfig::new(BLOB_DIR.into())).await?;
-
-    let blob_mgr = BlobManager::new(data_store, blob_store);
-
-    let mut args = args().skip(1);
-
-    match args.next() {
-        Some(hash) => match blob_mgr.get(hash.parse()?)? {
-            Some(mut blob) => {
-                let mut stdout = stdout();
-
-                while let Some(chunk) = blob.try_next().await? {
-                    stdout.write_all(&chunk).await?;
-                }
-            }
-            None => {
-                eprintln!("Blob does not exist");
-                exit(1);
-            }
-        },
-        None => {
-            let stdin = stdin().compat();
-
-            let (blob_id, hash, size) = blob_mgr.put_sized(None, stdin).await?;
-
-            println!("Blob ID: {}", blob_id);
-            println!("Hash: {}", hash);
-            println!("Size: {}", size);
+#[app::logic]
+impl ModelStore {
+    #[app::init]
+    pub fn init() -> ModelStore {
+        ModelStore {
+            models: UnorderedMap::new(),
+            publisher: String::from(" "),
         }
     }
 
-    Ok(())
+    pub fn set(&mut self, key: String, value: String, publisher: String) -> Result<(), Error> {
+        env::log(&format!("Setting key: {:?} to value: {:?}", key, value));
+
+        if self.models.contains(&key)? {
+            app::emit!(Event::Updated {
+                key: &key,
+                value: &value,
+            });
+        } else {
+            app::emit!(Event::Inserted {
+                key: &key,
+                value: &value,
+            });
+        }
+
+        self.models.insert(key, value)?;
+
+        Ok(())
+    }
+
+    pub fn entries(&self) -> Result<BTreeMap<String, String>, Error> {
+        env::log("Getting all entries");
+
+        Ok(self.models.entries()?.collect())
+    }
+
+    pub fn len(&self) -> Result<usize, Error> {
+        env::log("Getting the number of entries");
+
+        Ok(self.models.len()?)
+    }
+
+    pub fn get<'a>(&self, key: &'a str) -> Result<Option<String>, Error<'a>> {
+        env::log(&format!("Getting key: {:?}", key));
+
+        self.models.get(key).map_err(Into::into)
+    }
+
+    pub fn get_unchecked(&self, key: &str) -> Result<String, Error> {
+        env::log(&format!("Getting key without checking: {:?}", key));
+
+        Ok(self.models.get(key)?.expect("key not found"))
+    }
+
+    pub fn get_result<'a>(&self, key: &'a str) -> Result<String, Error<'a>> {
+        env::log(&format!("Getting key, possibly failing: {:?}", key));
+
+        self.get(key)?.ok_or_else(|| Error::NotFound(key))
+    }
+
+    pub fn remove(&mut self, key: &str) -> Result<Option<String>, Error> {
+        env::log(&format!("Removing key: {:?}", key));
+
+        app::emit!(Event::Removed { key });
+
+        self.models.remove(key).map_err(Into::into)
+    }
+
+    pub fn clear(&mut self) -> Result<(), Error> {
+        env::log("Clearing all entries");
+
+        app::emit!(Event::Cleared);
+
+        self.models.clear().map_err(Into::into)
+    }
 }
