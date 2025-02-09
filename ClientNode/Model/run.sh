@@ -4,8 +4,8 @@
 set -e
 
 # Step 1: Run the Python model script and capture the prediction
-prediction=$(python3 ./model.py)
-
+prediction=$(python3 ./Model/model.py)
+echo "Prediction: $prediction"
 # Step 2: Multiply the prediction by 10*3
 multiplied_prediction=$(python3 -c "print(${prediction} * 100)")
 
@@ -58,4 +58,5 @@ def encrypt_cost(cost):
     return c, r, x
 
 encrypt_cost($multiplied_prediction)
+
 "

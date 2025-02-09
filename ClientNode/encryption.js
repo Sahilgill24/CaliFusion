@@ -1,25 +1,28 @@
-const crypto = require('crypto')
+const crypto = require('crypto');
 
 const algorithm = 'aes-256-cbc';
-const key = " "
-// key sent from diffie helman key exchange for AES encryption of the Model 
-const iv = crypto.randomBytes(16); //initialization vector
+const key = Buffer.from("mypasswith32chars>>AES_256_bytes".padEnd(32, " "), "utf-8"); // Ensure exactly 32 bytes
+const iv = crypto.randomBytes(16); // Initialization Vector
 
 function encrypt(text) {
-    let cipher = crypto.createCipheriv(algorithm, Buffer.from(key), iv);
-    let encrypted = cipher.update(text);
-    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    let cipher = crypto.createCipheriv(algorithm, key, iv);
+    let encrypted = Buffer.concat([cipher.update(text, 'utf-8'), cipher.final()]);
     return { iv: iv.toString('hex'), encryptedData: encrypted.toString('hex') };
 }
 
-function decrypt(text) {
-    let iv = Buffer.from(text.iv, 'hex');
-    let encryptedText = Buffer.from(text.encryptedData, 'hex');
-    let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
-    let decrypted = decipher.update(encryptedText);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    return decrypted;
+function decrypt(encryptedObject) {
+    let iv = Buffer.from(encryptedObject.iv, 'hex');
+    let encryptedText = Buffer.from(encryptedObject.encryptedData, 'hex');
+    let decipher = crypto.createDecipheriv(algorithm, key, iv);
+    let decrypted = Buffer.concat([decipher.update(encryptedText), decipher.final()]);
+    return decrypted.toString('utf-8');
 }
 
+// Example usage
+const encrypted = encrypt("Hello World");
+console.log("Encrypted:", encrypted.encryptedData);
 
-module.exports = { encrypt, decrypt }
+const decrypted = decrypt(encrypted);
+console.log("Decrypted:", decrypted);
+
+module.exports = { encrypt, decrypt };

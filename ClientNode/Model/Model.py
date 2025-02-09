@@ -4,7 +4,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 
 # Load the dataset
-file_path = '../trialdata/data4.csv'  # Update this with your file path
+file_path = './trialdata/data4.csv'  # Update this with your file path
 data = pd.read_csv(file_path)
 
 # Extract features (x) and target (y)
