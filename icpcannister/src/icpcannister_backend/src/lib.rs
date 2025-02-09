@@ -15,6 +15,11 @@ fn init(ledger_id: Principal) {
     });
 }
 
+// token transfer on successful payment
+// of icrc1 token
+// after payment the model and the key gets AES encrypted and are
+// sent to the contract
+// pedersen commitments are semi-Homomorhpic encryption schemes and are used to verify them
 #[ic_cdk::update]
 async fn transfer_icrc1(to: String) -> Result<u64, String> {
     let ledger_id = LEDGER_ID.with(|id| id.borrow().expect("Ledger ID not initialized"));
