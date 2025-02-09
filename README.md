@@ -1,7 +1,7 @@
 # CaliFusion
 
 <div align="center">
-<img src="./images/logo.png" height={100} width={100} alt="logo" />
+<img src="./images/logo.png" height={60} width={60} alt="logo" />
 </div>
 
 <br />
@@ -15,32 +15,9 @@ A platform where data providers can share encrypted datasets for AI model traini
 
 <div align="center">
 
-**Read our wonderful docs [here](https://tusknet.gitbook.io/tusknet).**
+**Read our wonderful docs [here](https://califusion.gitbook.io/califusion).**
 
 </div>
 
 ## Key Features and Architecture
 
-
-
-## Run locally 
-
-1. First clone the repository.
-
-2. Setup the local walrus server.
-    ``` sh
-    cd Server/server
-    npm i 
-    node walrus.js
-    ```
-3. Setup the walrus client.
-    ```sh
-    cd clientnode
-    npm i 
-    node model.js
-    ```
-4. Initialize the interface.
-   ```sh
-    pnpm i
-    pnpm dev
-   ```
