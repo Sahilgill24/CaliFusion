@@ -112,6 +112,7 @@ const StartTrainingButton = ({
   model: TrainerModel;
 }) => {
   const [dataSet, setDataSet] = useState<File | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
   getJWTObject()
   const [rid, setreciverid] = useState("5qxf7-r7wku-uma7f-brfgi-5c2w2-y7zpl-z24gc-fsajd-ryjfc-jllx5-bae");
   const stakeAndUploadDataSet = async () => {
@@ -131,9 +132,10 @@ const StartTrainingButton = ({
       },
     })
     console.log(response2)
+    setIsOpen(false);
   }
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger>
         <button
           className={`inline-flex gap-1 bg-primary text-primary-foreground rounded py-1 px-2 font-medium text-xs transition-all duration-200 ${visible ? "opacity-100" : "opacity-0"

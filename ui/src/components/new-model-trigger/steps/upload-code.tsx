@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronsRight, InfoIcon, UploadIcon } from "lucide-react";
 import { useNewModelStore } from "@/lib/stores/new-model-store";
 import axios from "axios";
-import ethers from "ethers";
+import { encrypt } from "@/lib/utils";
 
 
 const UploadCode = () => {
@@ -19,8 +19,7 @@ const UploadCode = () => {
 
   async function request(data: any) {
     console.log(data)
-    const response = await axios.post('http://localhost:5001/modelupload', { "data": data })
-    console.log(response)
+    const encryptedData = encrypt(data);
   }
 
 

@@ -55,9 +55,14 @@ app.post('/recieveModel', async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-app.get('/test', async (req, res) => {
-    res.send("Hello World");
-});
+
+app.get('/aggregate', async(req, res) => {
+    const data = fs.readFileSync('./encryption.txt', 'utf-8');
+    console.log(data);
+    const match = data.match(/x:(\d+)/);
+    const value = match[1];
+    res.send({value,data})
+})
 
 app.listen(4001, () => {
     console.log("Server running on port 4001");

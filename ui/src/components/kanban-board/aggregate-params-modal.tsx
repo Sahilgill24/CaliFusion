@@ -49,43 +49,39 @@ const AggregateParamsModalWrapper = ({
   // const signer = new ethers.Wallet('6b99711d264ac83b798ec10389f34afe53e6f6c6fdbb821b139aba9fd4cf9f2c', provider);
   // const contractAddress = '0x23cacbF723355F96fb42ce3ba1Cbc247F41C2568';
   // const aggregatorcontract = new ethers.Contract(contractAddress, abi, signer);
+  const sampleContributors: Contributor[] = [
+    {
+      address: "bd3sg-teaaa-aaaaa-qaaba-cai",
 
-  const [contributors, setContributors] = useState<Contributor[]>([]);
+    }
+  ];
+  const [contributors, setContributors] = useState<Contributor[]>(sampleContributors);
   const [isLoading, setIsLoading] = useState(false);
   const [aggregating, setIsAggregating] = useState(false);
   const [loss, setLoss] = useState<string | null>(null)
   const [uplaoder, setuploader] = useState<string | null>(null)
 
-  const sampleContributors: Contributor[] = [
-    {
-      address: "a3shf-5eaaa-aaaaa-qaafa-cai",
 
-    },
-    {
-      address: "a3shf-5eaaa-aaaaa-qaafa-cai",
-
-    },
-    {
-      address: "a3shf-5eaaa-aaaaa-qaafa-cai",
-
-    },
-  ];
 
 
   const aggregate = async () => {
     setIsAggregating(true);
 
-    const res = await axios.get('http://localhost:4000/getEncryptedValues');
-    const { uploader, encryptedvalue } = res.data
-    const encrypta: EncryptedData = {
-      iv: encryptedvalue.iv,
-      encryptedData: encryptedvalue.encryptedData,
-    };
+    const res = await axios.get('http://localhost:4001/aggregate');
+    const hi = res.data
+    console.log(hi)
+    const finalval = hi.value
 
-    const finalval = decrypt(encrypta).toString();
+
+    // const finalval = decrypt({
+    //   "iv": "3ef16ceda6f90e76abaaa92947d915c2",
+    //   "encryptedData": "f95071503886b276e01826ee7c42f5c23e35c2b307373d0cb65baf822320dca4b2a09973f85e7b7a833dbc5a942bf07a6dc23e8de3323a59f85626b50f32c5d56f3de71c9c3091bc08c5f8a39e37269349a7f7e58dbfc4b625e4e89dc68c76e94f71b07a162a28c14cd8dd1acddf24cb820cb6e308e83e669ca36b9a339a073e"
+    // }
+    // ).toString();
+
 
     // Extract the numeric value from the decrypted string (e.g., "x:2989")
-    const formattedValue = finalval.split(':')[1]?.trim(); // "2989"
+    const formattedValue = finalval; // "2989"
     if (!formattedValue || isNaN(Number(formattedValue))) {
       throw new Error("Invalid decrypted value format");
     }
@@ -108,8 +104,7 @@ const AggregateParamsModalWrapper = ({
     // setLoss(tx2)
     setLoss((parseFloat(formattedValue) / 100).toFixed(3))
     setIsAggregating(false);
-    console.log(uploader)
-    setuploader(uploader)
+
   }
 
   useEffect(() => {
@@ -150,7 +145,7 @@ const AggregateParamsModalWrapper = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {contributors.length ?? contributors.map((contributor, index) => (
+                {contributors.length && contributors.map((contributor, index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <CopyAddress
