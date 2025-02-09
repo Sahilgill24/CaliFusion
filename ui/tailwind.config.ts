@@ -1,17 +1,14 @@
+/** @type {import('tailwindcss').Config} */
+import tailwindAnimate from "tailwindcss-animate";
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-satoshi)", "sans-serif"],
-        display: ["var(--font-eiko)", "sans-serif"],
+        sans: ["satoshi", "sans-serif"],
+        display: ["eiko", "sans-serif"],
       },
       colors: {
         background: "hsl(var(--background))",
@@ -93,5 +90,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindAnimate],
 } satisfies Config;
