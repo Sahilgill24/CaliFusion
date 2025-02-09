@@ -5,15 +5,10 @@
       "package": "icpcannister_backend",
       "type": "rust"
     },
-    "icpcannister_frontend": {
-      "dependencies": [
-        "icpcannister_backend"
-      ],
-      "source": [
-        "src/icpcannister_frontend/dist"
-      ],
-      "type": "assets",
-      "workspace": "icpcannister_frontend"
+    "ledger": {
+      "type": "custom",
+      "wasm": "https://download.dfinity.systems/ic/aba60ffbc46acfc8990bf4d5685c1360bd7026b9/canisters/ledger-canister.wasm.gz",
+      "candid": "https://raw.githubusercontent.com/dfinity/ic/aba60ffbc46acfc8990bf4d5685c1360bd7026b9/rs/ledger_suite/icp/ledger.did"
     }
   },
   "defaults": {

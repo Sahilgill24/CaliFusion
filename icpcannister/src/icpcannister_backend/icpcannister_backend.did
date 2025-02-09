@@ -1,3 +1,5 @@
-service : {
-    "greet": (text) -> (text) query;
+type Result = variant { Ok : nat64; Err : text };
+service : (principal) -> {
+  call_testing : () -> (text) query;
+  transfer_icrc1 : (text) -> (Result);
 }

@@ -3,9 +3,10 @@
 use std::collections::BTreeMap;
 
 use calimero_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use calimero_sdk::serde::Serialize;
+use calimero_sdk::env::ext::{AccountId, ProposalId};
+use calimero_sdk::serde::{Deserialize, Serialize};
 use calimero_sdk::{app, env};
-use calimero_storage::collections::{StoreError, UnorderedMap, Vector};
+use calimero_storage::collections::{unordered_map, StoreError, UnorderedMap, Vector};
 use thiserror::Error;
 
 #[app::state(emits = for<'a> Event<'a>)]
@@ -14,16 +15,35 @@ use thiserror::Error;
 pub struct ModelStore {
     models: UnorderedMap<String, String>,
     // Models stored and the Key to access that model
-    // AES encrypted key and model is used
+    // AES encrypted model and key is used
+    // key will be sent to the Node or Modeltrainer
+    // using diffie-helman key exchange
+    // On the trainers local machine the Model is
+    // decrypted and training begins
     publisher: String,
+    messages: UnorderedMap<ProposalId, Vector<Message>>,
+    // these are for the external function calls 
+}
+
+#[derive(
+    Clone, Debug, PartialEq, PartialOrd, BorshSerialize, BorshDeserialize, Serialize, Deserialize,
+)]
+#[borsh(crate = "calimero_sdk::borsh")]
+#[serde(crate = "calimero_sdk::serde")]
+pub struct Message {
+    id: String,
+    proposal_id: String,
+    author: String,
+    text: String,
+    created_at: String,
 }
 
 #[app::event]
 pub enum Event<'a> {
-    Inserted { key: &'a str, value: &'a str },
-    Updated { key: &'a str, value: &'a str },
-    Removed { key: &'a str },
-    Cleared,
+    ModelUploaded { key: &'a str, model: &'a str },
+    ModelUpdated { key: &'a str, model: &'a str },
+    ModelRemoved { key: &'a str },
+    ModelCleared,
 }
 
 #[derive(Debug, Error, Serialize)]
@@ -42,26 +62,27 @@ impl ModelStore {
     pub fn init() -> ModelStore {
         ModelStore {
             models: UnorderedMap::new(),
-            publisher: String::from(" "),
+            publisher: String::from("OWNER"),
+            messages: UnorderedMap::new(),
         }
     }
 
-    pub fn set(&mut self, key: String, value: String, publisher: String) -> Result<(), Error> {
-        env::log(&format!("Setting key: {:?} to value: {:?}", key, value));
+    pub fn set(&mut self, key: String, model: String) -> Result<(), Error> {
+        env::log(&format!("Uploaded model {:?} with key : {:?}", model, key));
 
         if self.models.contains(&key)? {
-            app::emit!(Event::Updated {
+            app::emit!(Event::ModelUpdated {
                 key: &key,
-                value: &value,
+                model: &model,
             });
         } else {
-            app::emit!(Event::Inserted {
+            app::emit!(Event::ModelUploaded {
                 key: &key,
-                value: &value,
+                model: &model,
             });
         }
 
-        self.models.insert(key, value)?;
+        self.models.insert(key, model)?;
 
         Ok(())
     }
@@ -99,7 +120,7 @@ impl ModelStore {
     pub fn remove(&mut self, key: &str) -> Result<Option<String>, Error> {
         env::log(&format!("Removing key: {:?}", key));
 
-        app::emit!(Event::Removed { key });
+        app::emit!(Event::ModelRemoved { key });
 
         self.models.remove(key).map_err(Into::into)
     }
@@ -107,7 +128,7 @@ impl ModelStore {
     pub fn clear(&mut self) -> Result<(), Error> {
         env::log("Clearing all entries");
 
-        app::emit!(Event::Cleared);
+        app::emit!(Event::ModelCleared);
 
         self.models.clear().map_err(Into::into)
     }
