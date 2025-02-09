@@ -15,17 +15,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { getJsonRpcClient, LogicApiDataSource } from "@/api/dataSource/LogicApiDataSource";
+import { getConfigAndJwt } from "@/api/dataSource/LogicApiDataSource";
+import { JsonRpcClient, ResponseData } from "@calimero-is-near/calimero-p2p-sdk";
+import { CreateProposalResponse, ProposalActionType } from "@/api/clientApi";
+import { getJWTObject } from "@/utils/storage";
 
 const TrainerModelCard = (props: TrainerModel) => {
   const [focused, setFocused] = useState(false);
   // reward calc
-  const ethToUsd = 3900;
-  const rewardInETH = props.epochs * 0.001;
+  const ethToUsd = 9;
+  const rewardInETH = props.epochs * 0.1;
   const rewardInDollars = rewardInETH * ethToUsd; // TODO: Calculate reward, ye to aise hi kra hai abhi
   const formattedRewardInUSD = Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
   }).format(Number(rewardInDollars));
+
 
   const truncatedWallet =
     props.walletAddress.slice(0, 6) + "..." + props.walletAddress.slice(-6);
@@ -60,7 +66,7 @@ const TrainerModelCard = (props: TrainerModel) => {
               {formattedRewardInUSD}
             </p>
             <p className="text-xs font-bold text-muted-foreground">
-              {rewardInETH.toFixed(3)} ETH
+              {rewardInETH.toFixed(3)} icrc-1
             </p>
           </div>
         </div>
@@ -75,7 +81,7 @@ const TrainerModelCard = (props: TrainerModel) => {
         <div className="flex items-center justify-between flex-1 p-2 bg-card">
           <p className="font-medium">Stake</p>
           <p className="bg-accent text-highlight px-2 rounded font-bold inline-flex text-xs py-1">
-            {props.stakeAmount.toFixed(3)} ETH
+            {props.stakeAmount.toFixed(3)} icrc-1
           </p>
         </div>
       </div>
@@ -106,10 +112,25 @@ const StartTrainingButton = ({
   model: TrainerModel;
 }) => {
   const [dataSet, setDataSet] = useState<File | null>(null);
+  getJWTObject()
+  const [rid, setreciverid] = useState("5qxf7-r7wku-uma7f-brfgi-5c2w2-y7zpl-z24gc-fsajd-ryjfc-jllx5-bae");
   const stakeAndUploadDataSet = async () => {
-    const response = await axios.post('http://localhost:4000/training')
+    const response = await axios.post('http://localhost:4001/recieveModel', {
+      "iv": "3ef16ceda6f90e76abaaa92947d915c2",
+      "encryptedData": "798fbe4a7fc06e6b25e4d8d91dc1c761"
+    }
+    )
     console.log(response)
+    // const { jwtObject, config, error } = getConfigAndJwt();
 
+    const response2: ResponseData<CreateProposalResponse> = await new LogicApiDataSource().createProposal({
+      action_type: ProposalActionType.Transfer,
+      params: {
+        receiver_id: rid,
+        amount: "100",
+      },
+    })
+    console.log(response2)
   }
   return (
     <Dialog>
@@ -127,7 +148,7 @@ const StartTrainingButton = ({
             Stake to Continue
           </DialogTitle>
           <DialogDescription>
-            Stake {model.stakeAmount.toFixed(3)} ETH to start training this
+            Stake {model.stakeAmount.toFixed(3)} icrc-1 to start training this
             model. This stake will be refunded after training is complete.
           </DialogDescription>
         </DialogHeader>
@@ -138,11 +159,11 @@ const StartTrainingButton = ({
               {model.epochs}
             </p>
           </div>
-        
+
           <div className="flex items-center justify-between flex-1 p-2 bg-muted">
             <p className="font-medium">Stake</p>
             <p className="bg-accent text-primary px-2 rounded font-bold inline-flex text-xs py-1">
-              {model.stakeAmount.toFixed(3)} ETH
+              {model.stakeAmount.toFixed(3)} icrc-1
             </p>
           </div>
         </div>
@@ -150,6 +171,17 @@ const StartTrainingButton = ({
           <Label>Upload Dataset (for training the model)</Label>
           <Input
             type="file"
+            onChange={(e) =>
+              setDataSet(e.target.files ? e.target.files[0] : null)
+            }
+          />
+        </div>
+        <div>
+          <Label> Receiver ID for icrc-1 transfer</Label>
+          <Input
+            readOnly
+            value={rid}
+
             onChange={(e) =>
               setDataSet(e.target.files ? e.target.files[0] : null)
             }

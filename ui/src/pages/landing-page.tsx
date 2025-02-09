@@ -15,7 +15,7 @@ const LandingPage = () => {
         variant={"shine"}
         size={"lg"}
         className="font-semibold"
-        onClick={() => navigate("/dashboard/publisher")}
+        onClick={() => navigate("/login")}
       >
         Get Started
       </Button>

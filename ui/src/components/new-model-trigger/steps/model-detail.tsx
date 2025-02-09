@@ -91,12 +91,12 @@ const ModelDetails = (props: ModelDetailProps) => {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="stakeAmount">Stake Amount (ETH)</Label>
+            <Label htmlFor="stakeAmount">Stake Amount (icrc-1)</Label>
             <Input
               id="stakeAmount"
               type="number"
               required
-              placeholder="Enter stake amount (ETH)"
+              placeholder="Enter stake amount (icrc-1)"
               min={0}
               step={0.01}
               value={stakeAmount}

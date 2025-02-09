@@ -28,6 +28,7 @@ import {
 import { AxiosHeader, createJwtHeader } from '../../utils/jwtHeaders';
 import { getRpcPath } from '../../utils/env';
 
+
 export function getJsonRpcClient() {
   return new JsonRpcClient(getStorageAppEndpointKey() ?? '', getRpcPath());
 }
@@ -84,6 +85,7 @@ export class LogicApiDataSource implements ClientApi {
     };
 
     console.log('RPC params:', params);
+    
 
     try {
       const response = await getJsonRpcClient().execute<

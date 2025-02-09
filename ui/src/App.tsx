@@ -18,7 +18,7 @@ export default function App() {
           <Route path="/auth" element={<Authenticate />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/dashboard/publisher" element={<PublisherDashboard />} />
-          <Route path="/dashboard/publisher" element={<TrainerDashboard />} />
+          <Route path="/dashboard/trainer" element={<TrainerDashboard />} />
         </Routes>
       </BrowserRouter>
     </AccessTokenWrapper>

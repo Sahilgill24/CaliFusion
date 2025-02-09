@@ -1,11 +1,11 @@
 export function getApplicationId(): string {
-  return process.env.NEXT_PUBLIC_APPLICATION_ID ?? '';
+  return import.meta.env.VITE_APPLICATION_ID ?? '';
 }
 
 export function getRpcPath(): string {
-  return process.env.NEXT_PUBLIC_RPC_PATH ?? '';
+  return import.meta.env.VITE_RPC_PATH ?? '';
 }
 
 export function getEnvContextId(): string {
-  return process.env.NEXT_PUBLIC_CONTEXT_ID ?? '';
+  return import.meta.env.VITE_CONTEXT_ID ?? '';
 }

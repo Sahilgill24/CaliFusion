@@ -31,9 +31,8 @@ import { EncryptedData } from "@/lib/utils";
 
 interface Contributor {
   address: string;
-  blobID: string | null;
-}
 
+}
 const AggregateParamsModalWrapper = ({
   children,
   id,
@@ -59,16 +58,16 @@ const AggregateParamsModalWrapper = ({
 
   const sampleContributors: Contributor[] = [
     {
-      address: "0x8F26D683822E60d522b58f7DB63D352CB7FAe6e4",
-      blobID: uplaoder,
+      address: "a3shf-5eaaa-aaaaa-qaafa-cai",
+
     },
     {
-      address: "0x8F26D683822E60d522b58f7DB63D352CB7FAe6e4",
-      blobID: uplaoder,
+      address: "a3shf-5eaaa-aaaaa-qaafa-cai",
+
     },
     {
-      address: "0x8F26D683822E60d522b58f7DB63D352CB7FAe6e4",
-      blobID: uplaoder,
+      address: "a3shf-5eaaa-aaaaa-qaafa-cai",
+
     },
   ];
 
@@ -147,7 +146,7 @@ const AggregateParamsModalWrapper = ({
               <TableHeader>
                 <TableRow>
                   <TableHead>Address</TableHead>
-                  <TableHead>BlobID</TableHead>
+
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -157,12 +156,6 @@ const AggregateParamsModalWrapper = ({
                       <CopyAddress
                         className="text-sm"
                         address={contributor.address}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <CopyAddress
-                        className="text-sm font-mono"
-                        address={contributor.blobID || ""}
                       />
                     </TableCell>
                   </TableRow>

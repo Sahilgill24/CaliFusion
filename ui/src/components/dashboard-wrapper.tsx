@@ -19,7 +19,7 @@ const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
 
   const address = "0x1234567890"; // TODO: make this dynamic as per user login
   const balance = 0.001
-  
+
   const truncatedWallet = address?.slice(0, 6) + "..." + address?.slice(-6);
 
   return (
@@ -46,21 +46,7 @@ const DashboardWrapper = ({ children }: { children: React.ReactNode }) => {
             </nav>
           </div>
 
-          {address ? (
-            <div className="flex flex-row gap-1">
-              <span className="text-sm ">
-                Balance :{" "}
-                {balance}{" "}
-                ETH
-              </span>
-              <Separator className="w-[2px]" orientation="vertical" />
-              <span className="text-sm text-muted-foreground">
-                {truncatedWallet}
-              </span>
-            </div>
-          ) : (
-            <Button>Connect Wallet</Button>
-          )}
+
         </header>
         <div className="mt-8 flex w-full flex-col gap-8">{children}</div>
       </div>

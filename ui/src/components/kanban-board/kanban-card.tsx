@@ -75,7 +75,7 @@ const KanbanCard: React.FC<CardProps> = ({
           <div className="flex items-center justify-between flex-1 p-2 bg-card">
             <p className="font-medium">Stake</p>
             <p className="bg-accent text-primary px-2 rounded font-bold inline-flex text-xs py-1">
-              {stakeAmount.toFixed(3)} ETH
+              {stakeAmount.toFixed(3)} icrc-1
             </p>
           </div>
         </div>
