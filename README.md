@@ -20,4 +20,5 @@ A platform where data providers can share encrypted datasets for AI model traini
 </div>
 
 ## Key Features and Architecture
+<img src="./images/architecture.jpeg" alt="architecture" />
 
